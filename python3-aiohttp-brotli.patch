@@ -1,0 +1,88 @@
+From 9afc44b052643213da15c9583ecbd643ca999601 Mon Sep 17 00:00:00 2001
+From: Felix Yan <felixonmars@archlinux.org>
+Date: Fri, 19 Jul 2019 21:32:55 +0800
+Subject: [PATCH] Use Brotli instead of brotlipy (#3803)
+
+brotlipy is stuck at brotli 0.6 and upstream is inactive. Let's switch
+to the official binding which is up-to-date.
+---
+ CHANGES/3803.feature       |  1 +
+ CONTRIBUTORS.txt           |  1 +
+ aiohttp/http_parser.py     | 22 ++++++++++++++++++++--
+ docs/client_quickstart.rst |  2 +-
+ docs/index.rst             |  2 +-
+ requirements/ci-wheel.txt  |  2 +-
+ setup.py                   |  2 +-
+ tox.ini                    |  2 +-
+ 8 files changed, 27 insertions(+), 7 deletions(-)
+ create mode 100644 CHANGES/3803.feature
+
+--- aiohttp-3.7.3/aiohttp/http_parser.py.orig	2021-02-06 22:03:16.853983452 +0100
++++ aiohttp-3.7.3/aiohttp/http_parser.py	2021-02-06 22:22:29.544405459 +0100
+@@ -810,9 +810,26 @@
+             if not HAS_BROTLI:  # pragma: no cover
+                 raise ContentEncodingError(
+                     "Can not decode content-encoding: brotli (br). "
+-                    "Please install `brotlipy`"
+-                )
+-            self.decompressor = brotli.Decompressor()
++                    "Please install `Brotli`")
++
++            class BrotliDecoder:
++                # Supports both 'brotlipy' and 'Brotli' packages
++                # since they share an import name. The top branches
++                # are for 'brotlipy' and bottom branches for 'Brotli'
++                def __init__(self) -> None:
++                    self._obj = brotli.Decompressor()
++
++                def decompress(self, data: bytes) -> bytes:
++                    if hasattr(self._obj, "decompress"):
++                        return self._obj.decompress(data)
++                    return self._obj.process(data)
++
++                def flush(self) -> bytes:
++                    if hasattr(self._obj, "flush"):
++                        return self._obj.flush()
++                    return b""
++
++            self.decompressor = BrotliDecoder()  # type: Any
+         else:
+             zlib_mode = 16 + zlib.MAX_WBITS if encoding == "gzip" else zlib.MAX_WBITS
+             self.decompressor = zlib.decompressobj(wbits=zlib_mode)
+diff --git a/docs/client_quickstart.rst b/docs/client_quickstart.rst
+index f58eb7166f..1d5d2fb448 100644
+--- a/docs/client_quickstart.rst
++++ b/docs/client_quickstart.rst
+@@ -171,7 +171,7 @@ The ``gzip`` and ``deflate`` transfer-encodings are automatically
+ decoded for you.
+ 
+ You can enable ``brotli`` transfer-encodings support,
+-just install  `brotlipy <https://github.com/python-hyper/brotlipy>`_.
++just install  `Brotli <https://pypi.org/project/Brotli>`_.
+ 
+ JSON Request
+ ============
+diff --git a/docs/index.rst b/docs/index.rst
+index aa20a78fe9..56aa7389f6 100644
+--- a/docs/index.rst
++++ b/docs/index.rst
+@@ -52,7 +52,7 @@ Installing speedups altogether
+ ------------------------------
+ 
+ The following will get you ``aiohttp`` along with :term:`chardet`,
+-:term:`aiodns` and ``brotlipy`` in one bundle. No need to type
++:term:`aiodns` and ``Brotli`` in one bundle. No need to type
+ separate commands anymore!
+ 
+ .. code-block:: bash
+--- aiohttp-3.7.3/setup.py.orig	2021-02-06 22:24:15.207166368 +0100
++++ aiohttp-3.7.3/setup.py	2021-02-06 22:24:45.976999674 +0100
+@@ -137,7 +137,7 @@
+     extras_require={
+         "speedups": [
+             "aiodns",
+-            "brotlipy",
++            "Brotli",
+             "cchardet",
+         ],
+     },
