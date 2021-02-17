@@ -88,9 +88,10 @@ Dokumentacja API aiohttp.
 %if %{with tests}
 # test_data_stream_exc_chain uses network, fails
 # test_async_iterable_payload_default_content_type, test_async_iterable_payload_explicit_content_type fail with TypeError (need update?)
+# test_mark_formdata_as_processed requires network
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS="pytest_cov.plugin,pytest_mock" \
-%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type)'
+%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed)'
 %endif
 
 %if %{with doc}
