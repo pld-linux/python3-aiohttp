@@ -24,6 +24,7 @@ BuildRequires:	python3-async_timeout >= 3.0
 BuildRequires:	python3-attrs >= 17.3.0
 BuildRequires:	python3-brotli
 BuildRequires:	python3-chardet >= 2.0
+BuildRequires:	python3-freezegun
 BuildRequires:	python3-gunicorn
 %if "%{py3_ver}" < "3.7"
 BuildRequires:	python3-idna-ssl
