@@ -3,17 +3,17 @@
 %bcond_without	doc	# API documentation
 %bcond_without	tests	# unit tests
 
-%define 	module	template
+%define		module	template
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.7.3
-Release:	2
+Version:	3.7.4
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohttp/
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	a66039c12f33dd093a2c260f5c459632
+# Source0-md5:	586eb4e4dcb1e41242ede0c5bcfd4014
 # adjusted from https://github.com/aio-libs/aiohttp/commit/9afc44b052643213da15c9583ecbd643ca999601.patch
 Patch0:		%{name}-brotli.patch
 URL:		https://pypi.org/project/aiohttp/
