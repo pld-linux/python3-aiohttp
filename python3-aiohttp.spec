@@ -62,7 +62,7 @@ Szkielet asynchronicznego klienta/serwera http.
 Summary:	aiohttp API documentation
 Summary(pl.UTF-8):	Dokumentacja API aiohttp
 Group:		Documentation
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description apidocs
 API documentation for aiohttp.
