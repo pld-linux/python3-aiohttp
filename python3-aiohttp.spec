@@ -85,10 +85,12 @@ Dokumentacja API aiohttp.
 # test_data_stream_exc_chain uses network, fails
 # test_async_iterable_payload_default_content_type, test_async_iterable_payload_explicit_content_type fail with TypeError (need update?)
 # test_mark_formdata_as_processed requires network
+# test_client_session_timeout_zero fails on builders
+# test_requote_redirect_url_default uses network, fails
 %{__mv} tests/test_proxy_functional.py{,.disabled} # needs proxy_py binary
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS="pytest_cov.plugin,pytest_mock" \
-%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed or test_c_parser_loaded or test_aiohttp_plugin_async_fixture)'
+%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed or test_c_parser_loaded or test_aiohttp_plugin_async_fixture or test_client_session_timeout_zero or test_requote_redirect_url_default)'
 %endif
 
 %if %{with doc}
