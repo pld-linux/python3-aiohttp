@@ -7,20 +7,19 @@
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.7.4
-Release:	2
+Version:	3.8.1
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
-#Source0Download: https://pypi.org/simple/aiohttp/
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	586eb4e4dcb1e41242ede0c5bcfd4014
-# adjusted from https://github.com/aio-libs/aiohttp/commit/9afc44b052643213da15c9583ecbd643ca999601.patch
-Patch0:		%{name}-brotli.patch
+# Source0-md5:	faf7726dc65a940272874c0f441e8ec6
+Patch0:		disable-towncrier.patch
 URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	python3-devel >= 1:3.6
 BuildRequires:	python3-setuptools
 %if %{with tests}
-BuildRequires:	python3-async_timeout >= 3.0
+BuildRequires:	python3-aiosignal
+BuildRequires:	python3-async_timeout >= 4.0
 BuildRequires:	python3-attrs >= 17.3.0
 BuildRequires:	python3-brotli
 BuildRequires:	python3-chardet >= 2.0
@@ -39,8 +38,6 @@ BuildRequires:	python3-yarl >= 1.0
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
-# if using noarchpackage, replace with:
-#BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	sed >= 4.0
 %if %{with doc}
 BuildRequires:	python3-aiohttp_theme
@@ -48,7 +45,6 @@ BuildRequires:	python3-sphinxcontrib-asyncio
 BuildRequires:	python3-sphinxcontrib-blockdiag
 BuildRequires:	sphinx-pdg-3
 %endif
-# replace with other requires if defined in setup.py
 Requires:	python3-modules >= 1:3.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,7 +70,7 @@ Dokumentacja API aiohttp.
 %setup -q -n aiohttp-%{version}
 %patch0 -p1
 
-%{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' examples/*.py examples/legacy/*.py
+%{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' examples/*.py
 
 # adjust for python 3.7+
 %{__sed} -i -e '/^from async_generator/d; /^ *@async_generator/d; s/await yield_/yield/' tests/*.py
@@ -89,9 +85,10 @@ Dokumentacja API aiohttp.
 # test_data_stream_exc_chain uses network, fails
 # test_async_iterable_payload_default_content_type, test_async_iterable_payload_explicit_content_type fail with TypeError (need update?)
 # test_mark_formdata_as_processed requires network
+%{__mv} tests/test_proxy_functional.py{,.disabled} # needs proxy_py binary
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS="pytest_cov.plugin,pytest_mock" \
-%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed)'
+%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed or test_c_parser_loaded or test_aiohttp_plugin_async_fixture)'
 %endif
 
 %if %{with doc}
