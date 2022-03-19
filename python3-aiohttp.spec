@@ -18,23 +18,35 @@ URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	python3-devel >= 1:3.6
 BuildRequires:	python3-setuptools
 %if %{with tests}
-BuildRequires:	python3-aiosignal
+#BuildRequires:	python3-aiodns >= 1.1
+BuildRequires:	python3-aiosignal >= 1.1.2
 BuildRequires:	python3-async_timeout >= 4.0
+BuildRequires:	python3-async_timeout < 5
+%if "%{py3_ver}" < "3.8"
+BuildRequires:	python3-asynctest = 0.13.0
+%endif
 BuildRequires:	python3-attrs >= 17.3.0
 BuildRequires:	python3-brotli
-BuildRequires:	python3-chardet >= 2.0
+BuildRequires:	python3-charset_normalizer >= 2.0
+BuildRequires:	python3-charset_normalizer < 3
+BuildRequires:	python3-cchardet
 BuildRequires:	python3-freezegun
+BuildRequires:	python3-frozenlist >= 1.1.1
 BuildRequires:	python3-gunicorn
 %if "%{py3_ver}" < "3.7"
-BuildRequires:	python3-idna-ssl
+BuildRequires:	python3-idna-ssl >= 1.0
 %endif
 BuildRequires:	python3-multidict >= 4.5
+BuildRequires:	python3-multidict < 7
 BuildRequires:	python3-pytest >= 3.8.2
 BuildRequires:	python3-pytest-cov
 BuildRequires:	python3-pytest-mock
 BuildRequires:	python3-re_assert
+%if "%{py3_ver}" < "3.8"
 BuildRequires:	python3-typing_extensions >= 3.6.5
+%endif
 BuildRequires:	python3-yarl >= 1.0
+BuildRequires:	python3-yarl < 2
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
@@ -75,9 +87,6 @@ Dokumentacja API aiohttp.
 # adjust for python 3.7+
 %{__sed} -i -e '/^from async_generator/d; /^ *@async_generator/d; s/await yield_/yield/' tests/*.py
 
-# until we have pytest >= 6:
-%{__sed} -i -e '/assert_outcomes/ s/errors=/error=/' tests/test_pytest_plugin.py
-
 %build
 %py3_build
 
@@ -95,7 +104,8 @@ PYTEST_PLUGINS="pytest_cov.plugin,pytest_mock" \
 
 %if %{with doc}
 %{__make} -C docs html \
-	SPHINXBUILD=sphinx-build-3
+	SPHINXBUILD=sphinx-build-3 \
+	SPHINXOPTS="-n"
 %endif
 
 %install
