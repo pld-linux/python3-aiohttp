@@ -7,12 +7,12 @@
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.8.1
-Release:	3
+Version:	3.8.3
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	faf7726dc65a940272874c0f441e8ec6
+# Source0-md5:	642653db642be1508e50fcdeafe0f928
 Patch0:		disable-towncrier.patch
 URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	python3-devel >= 1:3.6
@@ -91,15 +91,15 @@ Dokumentacja API aiohttp.
 %py3_build
 
 %if %{with tests}
-# test_data_stream_exc_chain uses network, fails
-# test_async_iterable_payload_default_content_type, test_async_iterable_payload_explicit_content_type fail with TypeError (need update?)
+# test_data_stream_exc_chain uses network
 # test_mark_formdata_as_processed requires network
 # test_client_session_timeout_zero fails on builders
-# test_requote_redirect_url_default uses network, fails
+# test_requote_redirect_url_default uses network
+# test_unsupported_upgrade is marked as xfail, but succeeds
 %{__mv} tests/test_proxy_functional.py{,.disabled} # needs proxy_py binary
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS="pytest_cov.plugin,pytest_mock" \
-%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_async_iterable_payload_default_content_type or test_async_iterable_payload_explicit_content_type or test_mark_formdata_as_processed or test_c_parser_loaded or test_aiohttp_plugin_async_fixture or test_client_session_timeout_zero or test_requote_redirect_url_default)'
+%{__python3} -m pytest tests -k 'not (test_data_stream_exc_chain or test_mark_formdata_as_processed or test_client_session_timeout_zero or test_requote_redirect_url_default or test_c_parser_loaded or test_unsupported_upgrade)'
 %endif
 
 %if %{with doc}
@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %py3_install
 
 %{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/.hash
-%{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/*.{c,h,pxd,pxi,pyx}
+%{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/*.{pxd,pxi,pyx}
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -pr examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
