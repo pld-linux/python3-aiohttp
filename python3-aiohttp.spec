@@ -22,7 +22,7 @@ BuildRequires:	python3-setuptools
 BuildRequires:	python3-aiosignal >= 1.1.2
 BuildRequires:	python3-async_timeout >= 4.0
 BuildRequires:	python3-async_timeout < 5
-%if "%{py3_ver}" < "3.8"
+%if "%{ver_lt '%{py3_ver}' '3.8'}" == "1"
 BuildRequires:	python3-asynctest = 0.13.0
 %endif
 BuildRequires:	python3-attrs >= 17.3.0
@@ -33,7 +33,7 @@ BuildRequires:	python3-cchardet
 BuildRequires:	python3-freezegun
 BuildRequires:	python3-frozenlist >= 1.1.1
 BuildRequires:	python3-gunicorn
-%if "%{py3_ver}" < "3.7"
+%if "%{py3_ver}" == "3.6"
 BuildRequires:	python3-idna-ssl >= 1.0
 %endif
 BuildRequires:	python3-multidict >= 4.5
@@ -42,14 +42,14 @@ BuildRequires:	python3-pytest >= 3.8.2
 BuildRequires:	python3-pytest-cov
 BuildRequires:	python3-pytest-mock
 BuildRequires:	python3-re_assert
-%if "%{py3_ver}" < "3.8"
+%if "%{ver_lt '%{py3_ver}' '3.8'}" == "1"
 BuildRequires:	python3-typing_extensions >= 3.6.5
 %endif
 BuildRequires:	python3-yarl >= 1.0
 BuildRequires:	python3-yarl < 2
 %endif
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	rpmbuild(macros) >= 1.749
 BuildRequires:	sed >= 4.0
 %if %{with doc}
 BuildRequires:	python3-aiohttp_theme
