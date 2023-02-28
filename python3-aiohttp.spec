@@ -48,6 +48,7 @@ BuildRequires:	python3-typing_extensions >= 3.6.5
 BuildRequires:	python3-yarl >= 1.0
 BuildRequires:	python3-yarl < 2
 %endif
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.749
 BuildRequires:	sed >= 4.0
