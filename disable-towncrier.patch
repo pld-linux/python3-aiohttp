@@ -1,41 +1,27 @@
-Extension error (sphinxcontrib.towncrier):
-Handler <bound method TowncrierDraftEntriesEnvironmentCollector.get_outdated_docs of <sphinxcontrib.towncrier.TowncrierDraftEntriesEnvironmentCollector object at 0xf5667f58>> for event 'env-get-outdated' threw an exception (exception: The template file '/home/users/baggins/devel/PLD/rpm/BUILD/aiohttp-3.8.1/CHANGES/.TEMPLATE.rst' does not exist.)
-
---- aiohttp-3.8.3/docs/conf.py.orig	2022-09-21 15:09:27.000000000 +0200
-+++ aiohttp-3.8.3/docs/conf.py	2022-10-24 17:25:39.938617920 +0200
-@@ -54,7 +54,6 @@ extensions = [
-     # Third-party extensions:
-     "sphinxcontrib.asyncio",
-     "sphinxcontrib.blockdiag",
--    "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
+--- aiohttp-3.11.11/docs/changes.rst~	2024-12-18 20:47:51.000000000 +0100
++++ aiohttp-3.11.11/docs/changes.rst	2025-02-10 19:09:44.678917336 +0100
+@@ -6,13 +6,6 @@ Changelog
+ 
+ .. only:: not is_release
+ 
+-   To be included in v\ |release| (if present)
+-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-
+-   .. towncrier-draft-entries:: |release| [UNRELEASED DRAFT]
+-
+    Released versions
+    ^^^^^^^^^^^^^^^^^
+ 
+-.. include:: ../CHANGES.rst
+-   :start-after: .. towncrier release notes start
+--- aiohttp-3.11.11/docs/conf.py~	2024-12-18 20:47:51.000000000 +0100
++++ aiohttp-3.11.11/docs/conf.py	2025-02-10 19:09:59.019516252 +0100
+@@ -58,8 +58,6 @@ extensions = [
+     "sphinx.ext.graphviz",
+     "sphinx.ext.intersphinx",
+     "sphinx.ext.viewcode",
+-    # Third-party extensions:
+-    "sphinxcontrib.towncrier.ext",  # provides `towncrier-draft-entries` directive
  ]
  
  
-@@ -439,10 +438,3 @@ nitpick_ignore = [
-     ("py:exc", "HTTPMethodNotAllowed"),  # undocumented
-     ("py:class", "HTTPMethodNotAllowed"),  # undocumented
- ]
--
--# -- Options for towncrier_draft extension -----------------------------------
--
--towncrier_draft_autoversion_mode = "draft"  # or: 'sphinx-version', 'sphinx-release'
--towncrier_draft_include_empty = True
--towncrier_draft_working_directory = PROJECT_ROOT_DIR
--# Not yet supported: towncrier_draft_config_path = 'pyproject.toml'  # relative to cwd
---- aiohttp-3.8.1/docs/changes.rst~	2021-11-14 21:05:00.000000000 +0100
-+++ aiohttp-3.8.1/docs/changes.rst	2021-11-29 22:05:27.441003864 +0100
-@@ -4,14 +4,7 @@
- Changelog
- =========
- 
--To be included in v\ |release| (if present)
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--
--.. towncrier-draft-entries:: |release| [UNRELEASED DRAFT]
--
- Released versions
- ^^^^^^^^^^^^^^^^^
- 
- .. include:: ../CHANGES.rst
--
--.. include:: ../HISTORY.rst
