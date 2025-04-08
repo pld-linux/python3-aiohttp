@@ -15,17 +15,12 @@ Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{vers
 # Source0-md5:	17f04b60068122e998a60a3010679501
 Patch0:		disable-towncrier.patch
 URL:		https://pypi.org/project/aiohttp/
-BuildRequires:	python3-devel >= 1:3.6
+BuildRequires:	python3-devel >= 1:3.9
 BuildRequires:	python3-setuptools
 %if %{with tests}
 #BuildRequires:	python3-aiodns >= 1.1
-BuildRequires:	python3-aiohappyeyeballs
+BuildRequires:	python3-aiohappyeyeballs >= 2.3.0
 BuildRequires:	python3-aiosignal >= 1.1.2
-BuildRequires:	python3-async_timeout >= 4.0
-BuildRequires:	python3-async_timeout < 5
-%if "%{ver_lt '%{py3_ver}' '3.8'}" == "1"
-BuildRequires:	python3-asynctest = 0.13.0
-%endif
 BuildRequires:	python3-attrs >= 17.3.0
 BuildRequires:	python3-brotli
 BuildRequires:	python3-charset_normalizer >= 2.0
@@ -39,16 +34,14 @@ BuildRequires:	python3-idna-ssl >= 1.0
 %endif
 BuildRequires:	python3-multidict >= 4.5
 BuildRequires:	python3-multidict < 7
+BuildRequires:	python3-propcache
 BuildRequires:	python3-pytest >= 3.8.2
 BuildRequires:	python3-pytest-cov
 BuildRequires:	python3-pytest-mock
 BuildRequires:	python3-pytest-xdist
 BuildRequires:	python3-re_assert
 BuildRequires:	python3-trustme
-%if "%{ver_lt '%{py3_ver}' '3.8'}" == "1"
-BuildRequires:	python3-typing_extensions >= 3.6.5
-%endif
-BuildRequires:	python3-yarl >= 1.0
+BuildRequires:	python3-yarl >= 1.17.0
 BuildRequires:	python3-yarl < 2
 %endif
 BuildRequires:	rpm-build >= 4.6
@@ -61,7 +54,7 @@ BuildRequires:	python3-sphinxcontrib-asyncio
 BuildRequires:	python3-sphinxcontrib-blockdiag
 BuildRequires:	sphinx-pdg-3
 %endif
-Requires:	python3-modules >= 1:3.6
+Requires:	python3-modules >= 1:3.9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
