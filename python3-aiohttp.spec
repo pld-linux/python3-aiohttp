@@ -7,12 +7,12 @@
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.11.11
-Release:	3
+Version:	3.11.18
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	17f04b60068122e998a60a3010679501
+# Source0-md5:	f75ab428107e8cddfa2f9a132db213d9
 Patch0:		disable-towncrier.patch
 URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	python3-devel >= 1:3.9
