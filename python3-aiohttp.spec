@@ -8,13 +8,13 @@
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.13.2
+Version:	3.13.3
 Release:	1
-License:	Apache v2.0
+License:	Apache v2.0, MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohttp/
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	336f47ec48aff07052a7f1dcf38dfbac
+# Source0-md5:	83aff9f11bb25dbffffc2415fd34dfa3
 Patch0:		disable-towncrier.patch
 URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	llhttp-devel >= 9.3.0
@@ -35,7 +35,7 @@ BuildRequires:	python3-attrs >= 17.3.0
 BuildRequires:	python3-backports.zstd
 %endif
 BuildRequires:	python3-blockbuster
-BuildRequires:	python3-brotli
+BuildRequires:	python3-brotli >= 1.2
 BuildRequires:	python3-charset_normalizer >= 2.0
 BuildRequires:	python3-charset_normalizer < 3
 BuildRequires:	python3-freezegun
@@ -144,6 +144,7 @@ PYTHONPATH=$(readlink -f build-3/lib.*) \
 %endif
 
 %if %{with doc}
+PYTHONPATH=$(pwd) \
 %{__make} -C docs html \
 	SPHINXBUILD=sphinx-build-3 \
 	SPHINXOPTS="-n"
@@ -184,5 +185,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with doc}
 %files apidocs
 %defattr(644,root,root,755)
-%doc docs/_build/html/{_images,_static,*.html,*.js}
+%doc docs/_build/html/{_images,_modules,_static,*.html,*.js}
 %endif
