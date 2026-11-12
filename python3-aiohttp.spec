@@ -9,7 +9,7 @@ Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
 Version:	3.14.5
-Release:	1
+Release:	2
 License:	Apache v2.0, MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohttp/
@@ -37,8 +37,6 @@ BuildRequires:	python3-backports.zstd
 %endif
 BuildRequires:	python3-blockbuster
 BuildRequires:	python3-brotli >= 1.2
-BuildRequires:	python3-charset_normalizer >= 2.0
-BuildRequires:	python3-charset_normalizer < 3
 BuildRequires:	python3-freezegun
 BuildRequires:	python3-frozenlist >= 1.1.1
 BuildRequires:	python3-gunicorn
