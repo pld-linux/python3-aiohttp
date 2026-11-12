@@ -1,0 +1,12 @@
+sphinxcontrib-mermaid is not packaged; its only user, THREAT_MODEL.md, is not in the sdist
+
+--- aiohttp-3.14.5/docs/conf.py~	2026-11-12 00:59:54.781100860 +0100
++++ aiohttp-3.14.5/docs/conf.py	2026-11-12 00:59:54.809999999 +0100
+@@ -60,7 +60,6 @@
+     "sphinx.ext.viewcode",
+     # Third-party extensions:
+     "myst_parser",  # renders Markdown sources (e.g. ``THREAT_MODEL.md``)
+-    "sphinxcontrib.mermaid",  # renders the Mermaid flowcharts in ``THREAT_MODEL.md``
+     "sphinx_issues",  # implements `:issue:`, `:pr:` and other GH-related roles
+ ]
+ 

@@ -8,20 +8,21 @@
 Summary:	Async http client/server framework
 Summary(pl.UTF-8):	Szkielet asynchronicznego klienta/serwera http
 Name:		python3-aiohttp
-Version:	3.13.3
+Version:	3.14.5
 Release:	1
 License:	Apache v2.0, MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohttp/
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
-# Source0-md5:	83aff9f11bb25dbffffc2415fd34dfa3
+# Source0-md5:	c31a05528821715778ebe0e56374c4dc
 Patch0:		disable-towncrier.patch
+Patch1:		docs-no-mermaid.patch
 URL:		https://pypi.org/project/aiohttp/
 BuildRequires:	llhttp-devel >= 9.3.0
-BuildRequires:	python3-Cython >= 3.1.1
-BuildRequires:	python3-devel >= 1:3.9
+BuildRequires:	python3-Cython >= 3.2.5
+BuildRequires:	python3-devel >= 1:3.10
 BuildRequires:	python3-pkgconfig
-BuildRequires:	python3-setuptools >= 1:67.0
+BuildRequires:	python3-setuptools >= 1:77.0
 %if %{with tests}
 BuildRequires:	python3-aiodns >= 3.3.0
 BuildRequires:	python3-aiohappyeyeballs >= 2.5.0
@@ -43,13 +44,14 @@ BuildRequires:	python3-frozenlist >= 1.1.1
 BuildRequires:	python3-gunicorn
 BuildRequires:	python3-isal
 BuildRequires:	python3-multidict >= 4.5
-BuildRequires:	python3-multidict < 7
+BuildRequires:	python3-multidict < 8
 BuildRequires:	python3-propcache >= 0.2.0
 # for test_proxy_functional
 #BuildRequires:	python3-proxy.py >= 2.4.4rc5
 BuildRequires:	python3-pytest >= 3.8.2
 BuildRequires:	python3-pytest-cov
 BuildRequires:	python3-pytest-mock
+BuildRequires:	python3-pytest-timeout
 BuildRequires:	python3-pytest-xdist
 BuildRequires:	python3-pytest_codspeed
 # for tests/autobahn (with Docker)
@@ -60,7 +62,7 @@ BuildRequires:	python3-trustme
 BuildRequires:	python3-uvloop
 # for tests/autobahn
 #BuildRequires:	python3-wait-for-it
-BuildRequires:	python3-yarl >= 1.17.0
+BuildRequires:	python3-yarl >= 1.25.1
 BuildRequires:	python3-yarl < 2
 BuildRequires:	python3-zlib-ng
 %endif
@@ -70,13 +72,15 @@ BuildRequires:	rpmbuild(macros) >= 1.749
 BuildRequires:	sed >= 4.0
 %if %{with doc}
 BuildRequires:	python3-aiohttp_theme
+BuildRequires:	python3-myst_parser
+BuildRequires:	python3-sphinx_issues
 BuildRequires:	sphinx-pdg-3
 %endif
 %if %{with benchmark}
 # causes pytest_codspeed to disable some functionality
 BuildConflicts:	python3-pytest-benchmark
 %endif
-Requires:	python3-modules >= 1:3.9
+Requires:	python3-modules >= 1:3.10
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -100,6 +104,7 @@ Dokumentacja API aiohttp.
 %prep
 %setup -q -n aiohttp-%{version}
 %patch -P0 -p1
+%patch -P1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' examples/*.py
 
@@ -123,7 +128,7 @@ export AIOHTTP_USE_SYSTEM_DEPS=1
 # disable parallelism because too many threads/sockets are used
 %{__mv} tests/test_proxy_functional.py{,.disabled} # needs proxy.py module
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-PYTEST_PLUGINS="pytest_codspeed.plugin,pytest_cov,pytest_mock,xdist" \
+PYTEST_PLUGINS="pytest_codspeed.plugin,pytest_cov,pytest_mock,pytest_timeout,xdist" \
 PYTHONPATH=$(readlink -f build-3/lib.*) \
 %{__python3} -P -m pytest tests \
 	--numprocesses=0 \
@@ -131,12 +136,16 @@ PYTHONPATH=$(readlink -f build-3/lib.*) \
 %if %{without benchmark}
 	--ignore tests/test_benchmarks_client.py \
 	--ignore tests/test_benchmarks_client_request.py \
+	--ignore tests/test_benchmarks_client_response.py \
 	--ignore tests/test_benchmarks_client_ws.py \
+	--ignore tests/test_benchmarks_cookie_helpers.py \
 	--ignore tests/test_benchmarks_cookiejar.py \
 	--ignore tests/test_benchmarks_http_websocket.py \
 	--ignore tests/test_benchmarks_http_writer.py \
+	--ignore tests/test_benchmarks_multipart.py \
 	--ignore tests/test_benchmarks_web_fileresponse.py \
 	--ignore tests/test_benchmarks_web_middleware.py \
+	--ignore tests/test_benchmarks_web_request.py \
 	--ignore tests/test_benchmarks_web_response.py \
 	--ignore tests/test_benchmarks_web_urldispatcher.py \
 %endif
@@ -156,9 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 export AIOHTTP_USE_SYSTEM_DEPS=1
 %py3_install
 
-%{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/.hash
 %{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/*.{pxd,pxi,pyx}
-%{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/_websocket/.hash
 %{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/aiohttp/_websocket/*.{pxd,pyx}
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
